@@ -503,8 +503,8 @@ function hash(str: string) {
   }
   return Math.abs(h);
 }
-const pick = <T,>(arr: T[], seed: number, offset = 0) =>
-  arr[(seed + offset * 7919) % arr.length];
+const pick = <T,>(arr: T[], seed: number, offset = 0): T =>
+  arr[(seed + offset * 7919) % arr.length] as T;
 
 const materialFor = (cat: string, topic: string) => {
   const t = topic.toLowerCase();
