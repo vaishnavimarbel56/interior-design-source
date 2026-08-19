@@ -30,38 +30,41 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import { Separator } from "@/components/ui/separator";
 
 type Search = {
-  sub?: string;
-  sort: string;
-  price: string[];
-  brand: string[];
-  color: string[];
-  material: string[];
-  finish: string[];
-  size: string[];
-  stock?: string;
-  rating?: number;
-  min?: number;
-  max?: number;
+  sub?: string | undefined;
+  sort?: string | undefined;
+  price?: string[] | undefined;
+  brand?: string[] | undefined;
+  color?: string[] | undefined;
+  material?: string[] | undefined;
+  finish?: string[] | undefined;
+  size?: string[] | undefined;
+  stock?: string | undefined;
+  rating?: number | undefined;
+  min?: number | undefined;
+  max?: number | undefined;
 };
+
+type ListKey = "price" | "brand" | "color" | "material" | "finish" | "size";
 
 const toArray = (v: unknown): string[] =>
   Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : typeof v === "string" && v ? [v] : [];
 const toNum = (v: unknown) => (typeof v === "number" && !Number.isNaN(v) ? v : undefined);
+const str = (v: unknown) => (typeof v === "string" && v ? v : undefined);
 
 export const Route = createFileRoute("/category/$categorySlug")({
   validateSearch: (search: Record<string, unknown>): Search => ({
-    sub: typeof search.sub === "string" ? search.sub : undefined,
-    sort: typeof search.sort === "string" ? search.sort : "recommended",
-    price: toArray(search.price),
-    brand: toArray(search.brand),
-    color: toArray(search.color),
-    material: toArray(search.material),
-    finish: toArray(search.finish),
-    size: toArray(search.size),
-    stock: typeof search.stock === "string" ? search.stock : undefined,
-    rating: toNum(search.rating),
-    min: toNum(search.min),
-    max: toNum(search.max),
+    sub: str(search["sub"]),
+    sort: str(search["sort"]) ?? "recommended",
+    price: toArray(search["price"]),
+    brand: toArray(search["brand"]),
+    color: toArray(search["color"]),
+    material: toArray(search["material"]),
+    finish: toArray(search["finish"]),
+    size: toArray(search["size"]),
+    stock: str(search["stock"]),
+    rating: toNum(search["rating"]),
+    min: toNum(search["min"]),
+    max: toNum(search["max"]),
   }),
   loader: ({ params }) => {
     const category = getCategory(params.categorySlug);
@@ -108,13 +111,27 @@ function sortProducts(list: Product[], sort: string) {
 
 function CategoryPage() {
   const { category } = Route.useLoaderData();
-  const search = Route.useSearch();
+  const raw = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
+  const search = {
+    sub: raw.sub,
+    sort: raw.sort ?? "recommended",
+    price: raw.price ?? [],
+    brand: raw.brand ?? [],
+    color: raw.color ?? [],
+    material: raw.material ?? [],
+    finish: raw.finish ?? [],
+    size: raw.size ?? [],
+    stock: raw.stock,
+    rating: raw.rating,
+    min: raw.min,
+    max: raw.max,
+  };
 
   const setSearch = (patch: Partial<Search>) =>
     navigate({ search: (prev) => ({ ...prev, ...patch }) });
 
-  const toggle = (key: "price" | "brand" | "color" | "material" | "finish" | "size", value: string) => {
+  const toggle = (key: ListKey, value: string) => {
     const current = search[key];
     const next = current.includes(value) ? current.filter((v) => v !== value) : [...current, value];
     setSearch({ [key]: next } as Partial<Search>);
@@ -157,6 +174,10 @@ function CategoryPage() {
       search: {
         sub: search.sub,
         sort: search.sort,
+        stock: undefined,
+        rating: undefined,
+        min: undefined,
+        max: undefined,
         price: [],
         brand: [],
         color: [],
@@ -168,7 +189,7 @@ function CategoryPage() {
 
   const group = (
     title: string,
-    key: "price" | "brand" | "color" | "material" | "finish" | "size",
+    key: ListKey,
     options: { id: string; label: string }[],
   ) => (
     <div key={title} className="border-b border-border py-4">
