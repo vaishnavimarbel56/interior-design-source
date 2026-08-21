@@ -189,9 +189,12 @@ function CategoriesTab({ categories }: { categories: ReturnType<typeof useCatalo
   const editing = Boolean(form.slug);
 
   const save = () => {
-    if (!form.name.trim()) return toast.error("Name is required");
+    if (!form.name.trim()) {
+      toast.error("Name is required");
+      return;
+    }
     upsertCategory({
-      slug: form.slug || undefined,
+      ...(form.slug ? { slug: form.slug } : {}),
       name: form.name.trim(),
       tagline: form.tagline.trim(),
       image: form.image,
