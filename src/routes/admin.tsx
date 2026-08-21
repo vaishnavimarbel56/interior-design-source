@@ -189,9 +189,12 @@ function CategoriesTab({ categories }: { categories: ReturnType<typeof useCatalo
   const editing = Boolean(form.slug);
 
   const save = () => {
-    if (!form.name.trim()) return toast.error("Name is required");
+    if (!form.name.trim()) {
+      toast.error("Name is required");
+      return;
+    }
     upsertCategory({
-      slug: form.slug || undefined,
+      ...(form.slug ? { slug: form.slug } : {}),
       name: form.name.trim(),
       tagline: form.tagline.trim(),
       image: form.image,
@@ -319,9 +322,12 @@ function SubcategoriesTab({
           <div className="flex gap-2">
             <Button
               onClick={() => {
-                if (!form.name.trim()) return toast.error("Name is required");
+                if (!form.name.trim()) {
+                  toast.error("Name is required");
+                  return;
+                }
                 upsertSubcategory(category, {
-                  slug: form.slug || undefined,
+                  ...(form.slug ? { slug: form.slug } : {}),
                   name: form.name.trim(),
                 });
                 setForm({ slug: "", name: "" });
@@ -412,9 +418,15 @@ function ProductsTab({
   };
 
   const save = () => {
-    if (!form.name.trim()) return toast.error("Name is required");
-    if (!form.category || !form.subcategory) return toast.error("Pick a category & subcategory");
-    upsertProduct({ ...form, slug: slug ?? undefined, name: form.name.trim() });
+    if (!form.name.trim()) {
+      toast.error("Name is required");
+      return;
+    }
+    if (!form.category || !form.subcategory) {
+      toast.error("Pick a category & subcategory");
+      return;
+    }
+    upsertProduct({ ...form, ...(slug ? { slug } : {}), name: form.name.trim() });
     toast.success(slug ? "Product updated" : "Product added");
     reset();
   };
