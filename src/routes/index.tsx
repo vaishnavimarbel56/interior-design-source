@@ -1,13 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Truck, ShieldCheck, Headphones, Package } from "lucide-react";
-import { categories, products } from "@/data/catalog";
+import { useCatalog } from "@/lib/catalog-store";
+import { categoryLogo } from "@/data/category-logos";
 import { ProductCard } from "@/components/product-card";
+import { HScroller } from "@/components/h-scroller";
+import { Reveal } from "@/components/reveal";
 import { Button } from "@/components/ui/button";
 import heroImg from "@/assets/tiles.jpg";
 
-const TITLE = "TileHaus – Tiles, Sanitaryware, Sinks, Vanity, Marble & Granite";
+const TITLE = "Vaishnavi Marble – Tiles, Sanitaryware, Marble Statues & Granite";
 const DESCRIPTION =
-  "Buy floor tiles, wall tiles, parking tiles, sanitaryware, kitchen sinks, bathroom vanities, marble and granite at best prices with filters, ratings and fast delivery.";
+  "Buy floor tiles, wall tiles, parking tiles, sanitaryware, kitchen sinks, bathroom vanities, marble statues, marble mandirs, marble and granite at best prices.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,8 +27,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const bestSellers = [...products].sort((a, b) => b.popularity - a.popularity).slice(0, 6);
-  const topDeals = [...products].sort((a, b) => b.discount - a.discount).slice(0, 3);
+  const { categories, products } = useCatalog();
+  const bestSellers = [...products].sort((a, b) => b.popularity - a.popularity).slice(0, 12);
+  const topDeals = [...products].sort((a, b) => b.discount - a.discount).slice(0, 12);
 
   return (
     <div>
@@ -39,26 +43,71 @@ function Index() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-stone-deep/85 via-stone-deep/60 to-transparent" />
         <div className="container-page relative py-28">
-          <p className="text-sm uppercase tracking-[0.2em] text-accent">Since 1998 · Pan-India delivery</p>
-          <h1 className="mt-4 max-w-2xl font-display text-5xl leading-tight text-accent md:text-6xl">
-            Tiles, sanitaryware & stone for beautiful Indian homes
-          </h1>
-          <p className="mt-5 max-w-xl text-lg text-accent/85">
-            Six curated categories, hundreds of SKUs, transparent pricing with MRP, discount and
-            live stock — filter by brand, size, finish and colour.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild size="lg">
-              <Link to="/category/$categorySlug" params={{ categorySlug: "tiles" }}>
-                Shop Tiles <ArrowRight className="ml-2 size-4" />
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="secondary">
-              <Link to="/category/$categorySlug" params={{ categorySlug: "marble-and-granite" }}>
-                Marble & Granite
-              </Link>
-            </Button>
-          </div>
+          <Reveal>
+            <p className="text-sm uppercase tracking-[0.2em] text-accent">
+              Since 1998 · Pan-India delivery
+            </p>
+          </Reveal>
+          <Reveal delay={80}>
+            <h1 className="mt-4 max-w-2xl font-display text-5xl leading-tight text-accent md:text-6xl">
+              Tiles, sanitaryware, statues & stone for beautiful Indian homes
+            </h1>
+          </Reveal>
+          <Reveal delay={160}>
+            <p className="mt-5 max-w-xl text-lg text-accent/85">
+              Eight curated categories, hundreds of SKUs, transparent pricing with MRP, discount and
+              live stock — filter by brand, size, finish and colour.
+            </p>
+          </Reveal>
+          <Reveal delay={240}>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button asChild size="lg">
+                <Link to="/category/$categorySlug" params={{ categorySlug: "tiles" }}>
+                  Shop Tiles <ArrowRight className="ml-2 size-4" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="secondary">
+                <Link to="/category/$categorySlug" params={{ categorySlug: "marble-statues" }}>
+                  Marble Statues
+                </Link>
+              </Button>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Category logo area — one unique logo image per category */}
+      <section className="border-b border-border bg-card">
+        <div className="container-page py-10">
+          <Reveal>
+            <h2 className="text-center text-sm uppercase tracking-[0.2em] text-muted-foreground">
+              Browse our collections
+            </h2>
+          </Reveal>
+          <Reveal delay={100}>
+            <div className="mt-7 flex snap-x snap-mandatory gap-8 overflow-x-auto pb-3 md:justify-center md:flex-wrap md:overflow-visible">
+              {categories.map((c) => (
+                <Link
+                  key={c.slug}
+                  to="/category/$categorySlug"
+                  params={{ categorySlug: c.slug }}
+                  className="group flex w-24 shrink-0 snap-start flex-col items-center gap-2 text-center"
+                >
+                  <span className="size-20 overflow-hidden rounded-full border-2 border-border bg-muted shadow-card transition-all duration-300 group-hover:-translate-y-1 group-hover:border-primary group-hover:shadow-lift">
+                    <img
+                      src={categoryLogo(c.slug, c.image)}
+                      alt={`${c.name} logo`}
+                      loading="lazy"
+                      width={160}
+                      height={160}
+                      className="size-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </span>
+                  <span className="text-xs font-medium leading-tight text-foreground">{c.name}</span>
+                </Link>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -69,72 +118,89 @@ function Index() {
             { icon: Package, label: "Secure packaging" },
             { icon: ShieldCheck, label: "Warranty where applicable" },
             { icon: Headphones, label: "Bulk & wholesale enquiry" },
-          ].map(({ icon: Icon, label }) => (
-            <div key={label} className="flex items-center gap-3 text-sm text-muted-foreground">
-              <Icon className="size-5 text-primary" />
-              {label}
-            </div>
+          ].map(({ icon: Icon, label }, i) => (
+            <Reveal key={label} delay={i * 70}>
+              <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <Icon className="size-5 text-primary" />
+                {label}
+              </div>
+            </Reveal>
           ))}
         </div>
       </section>
 
       <section className="container-page py-16">
-        <h2 className="font-display text-3xl">Shop by category</h2>
+        <Reveal>
+          <h2 className="font-display text-3xl">Shop by category</h2>
+        </Reveal>
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {categories.map((c) => (
-            <Link
-              key={c.slug}
-              to="/category/$categorySlug"
-              params={{ categorySlug: c.slug }}
-              className="group overflow-hidden rounded-xl border border-border bg-card shadow-card transition-shadow hover:shadow-lift"
-            >
-              <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src={c.image}
-                  alt={c.name}
-                  loading="lazy"
-                  width={1024}
-                  height={768}
-                  className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-5">
-                <h3 className="font-display text-2xl">{c.name}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{c.tagline}</p>
-                <p className="mt-3 text-sm text-muted-foreground">
-                  {c.subcategories.map((s) => s.name).join(" · ")}
-                </p>
-              </div>
-            </Link>
+          {categories.map((c, i) => (
+            <Reveal key={c.slug} delay={(i % 3) * 90}>
+              <Link
+                to="/category/$categorySlug"
+                params={{ categorySlug: c.slug }}
+                className="group block h-full overflow-hidden rounded-xl border border-border bg-card shadow-card transition-shadow hover:shadow-lift"
+              >
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src={c.image}
+                    alt={c.name}
+                    loading="lazy"
+                    width={1024}
+                    height={768}
+                    className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-5">
+                  <h3 className="font-display text-2xl">{c.name}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{c.tagline}</p>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    {c.subcategories.map((s) => s.name).join(" · ")}
+                  </p>
+                </div>
+              </Link>
+            </Reveal>
           ))}
         </div>
       </section>
 
       <section className="container-page pb-16">
-        <div className="flex items-end justify-between">
-          <h2 className="font-display text-3xl">Best sellers</h2>
-          <Link
-            to="/category/$categorySlug"
-            params={{ categorySlug: "tiles" }}
-            className="text-sm text-primary hover:underline"
-          >
-            View all
-          </Link>
-        </div>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {bestSellers.map((p) => (
-            <ProductCard key={p.slug} product={p} />
-          ))}
-        </div>
+        <Reveal>
+          <div className="flex items-end justify-between">
+            <h2 className="font-display text-3xl">Best sellers</h2>
+            <Link
+              to="/category/$categorySlug"
+              params={{ categorySlug: "tiles" }}
+              className="text-sm text-primary hover:underline"
+            >
+              View all
+            </Link>
+          </div>
+        </Reveal>
+        <Reveal delay={100} className="mt-8">
+          <HScroller>
+            {bestSellers.map((p) => (
+              <div key={p.slug} className="w-[280px] shrink-0 snap-start sm:w-[320px]">
+                <ProductCard product={p} />
+              </div>
+            ))}
+          </HScroller>
+        </Reveal>
       </section>
 
       <section className="container-page pb-20">
-        <h2 className="font-display text-3xl">Biggest discounts</h2>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {topDeals.map((p) => (
-            <ProductCard key={p.slug} product={p} />
-          ))}
-        </div>
+        <Reveal>
+          <h2 className="font-display text-3xl">Biggest discounts</h2>
+        </Reveal>
+        <Reveal delay={100} className="mt-8">
+          <HScroller>
+            {topDeals.map((p) => (
+              <div key={p.slug} className="w-[280px] shrink-0 snap-start sm:w-[320px]">
+                <ProductCard product={p} />
+              </div>
+            ))}
+          </HScroller>
+        </Reveal>
       </section>
     </div>
   );
