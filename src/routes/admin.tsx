@@ -66,7 +66,14 @@ function ImageField({
             if (!file) return;
             setBusy(true);
             try {
-              onChange(await fileToJpegDataUrl(file));
+              const dataUrl = await fileToJpegDataUrl(file);
+              const owner = findImageOwner(dataUrl, exclude);
+              if (owner) {
+                e.target.value = "";
+                toast.error(`Duplicate image — already used by ${owner}. Upload a unique photo.`);
+                return;
+              }
+              onChange(dataUrl);
               toast.success("Image ready");
             } catch {
               toast.error("Could not read that image");
