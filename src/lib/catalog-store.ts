@@ -398,3 +398,22 @@ export async function fileToJpegDataUrl(file: File, maxSide = 1400, quality = 0.
     URL.revokeObjectURL(bitmapUrl);
   }
 }
+
+/* ------------------- duplicate image protection -------------------- */
+
+/**
+ * Strict rule: the same picture may never be used twice in the catalog.
+ * Returns the name of the item already using this image, or null when unique.
+ */
+export function findImageOwner(image: string, exclude?: string): string | null {
+  if (!image) return null;
+  for (const c of snapshot.categories) {
+    if (c.slug === exclude) continue;
+    if (c.image === image) return `category "${c.name}"`;
+  }
+  for (const p of snapshot.products) {
+    if (p.slug === exclude) continue;
+    if (p.image === image) return `product "${p.name}"`;
+  }
+  return null;
+}
