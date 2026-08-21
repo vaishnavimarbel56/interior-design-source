@@ -322,9 +322,12 @@ function SubcategoriesTab({
           <div className="flex gap-2">
             <Button
               onClick={() => {
-                if (!form.name.trim()) return toast.error("Name is required");
+                if (!form.name.trim()) {
+                  toast.error("Name is required");
+                  return;
+                }
                 upsertSubcategory(category, {
-                  slug: form.slug || undefined,
+                  ...(form.slug ? { slug: form.slug } : {}),
                   name: form.name.trim(),
                 });
                 setForm({ slug: "", name: "" });
