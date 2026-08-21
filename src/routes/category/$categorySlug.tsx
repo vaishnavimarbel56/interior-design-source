@@ -73,8 +73,8 @@ export const Route = createFileRoute("/category/$categorySlug")({
   },
   head: ({ loaderData }) => {
     const name = loaderData?.category.name ?? "Products";
-    const title = `${name} Online – Buy at Best Price | TileHaus`;
-    const description = `Shop ${name.toLowerCase()} at TileHaus. ${loaderData?.category.tagline ?? ""} Compare brands, sizes, finishes and prices with fast delivery.`;
+    const title = `${name} Online – Buy at Best Price | Vaishnavi Marble`;
+    const description = `Shop ${name.toLowerCase()} at Vaishnavi Marble. ${loaderData?.category.tagline ?? ""} Compare brands, sizes, finishes and prices with fast delivery.`;
     return {
       meta: [
         { title },

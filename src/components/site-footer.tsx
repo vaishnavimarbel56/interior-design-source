@@ -1,17 +1,30 @@
 import { Link } from "@tanstack/react-router";
-import { categories } from "@/data/catalog";
+import { useCatalog } from "@/lib/catalog-store";
+import logo from "@/assets/logo.jpeg.asset.json";
 
 export function SiteFooter() {
+  const { categories } = useCatalog();
+
   return (
     <footer className="mt-20 border-t border-border bg-secondary/60">
       <div className="container-page grid gap-10 py-14 md:grid-cols-4">
         <div>
-          <p className="font-display text-2xl">
-            Tile<span className="text-primary">Haus</span>
-          </p>
+          <div className="flex items-center gap-2.5">
+            <img
+              src={logo.url}
+              alt="Vaishnavi Marble logo"
+              width={44}
+              height={44}
+              loading="lazy"
+              className="size-11 rounded-md object-cover"
+            />
+            <p className="font-display text-xl leading-tight">
+              Vaishnavi <span className="text-primary">Marble</span>
+            </p>
+          </div>
           <p className="mt-3 text-sm text-muted-foreground">
-            Tiles, sanitaryware, kitchen sinks, vanities, parking tiles, marble & granite — delivered
-            across India with secure packaging and bulk pricing.
+            Tiles, sanitaryware, kitchen sinks, vanities, parking tiles, marble & granite —
+            delivered across India with secure packaging and bulk pricing.
           </p>
         </div>
         {categories.slice(0, 3).map((c) => (
@@ -35,7 +48,7 @@ export function SiteFooter() {
         ))}
       </div>
       <div className="border-t border-border py-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} TileHaus. Bulk & wholesale enquiries welcome.
+        © {new Date().getFullYear()} Vaishnavi Marble. Bulk & wholesale enquiries welcome.
       </div>
     </footer>
   );

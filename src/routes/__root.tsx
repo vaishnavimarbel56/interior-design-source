@@ -80,9 +80,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "TileHaus – Tiles, Sanitaryware, Sinks & Stone" },
+      { title: "Vaishnavi Marble – Tiles, Sanitaryware, Sinks & Stone" },
       { name: "description", content: "Tiles, sanitaryware, kitchen sinks, bathroom vanity, parking tiles, marble and granite at best prices." },
-      { property: "og:title", content: "TileHaus – Tiles, Sanitaryware, Sinks & Stone" },
+      { property: "og:title", content: "Vaishnavi Marble – Tiles, Sanitaryware, Sinks & Stone" },
       { property: "og:description", content: "Tiles, sanitaryware, kitchen sinks, bathroom vanity, parking tiles, marble and granite at best prices." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -93,7 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
