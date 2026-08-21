@@ -16,7 +16,7 @@ export const Route = createFileRoute("/product/$productSlug")({
   },
   head: ({ loaderData }) => {
     const p = loaderData?.product;
-    const title = p ? `${p.name} – ${inr(p.price)} ${p.unit} | TileHaus` : "Product | TileHaus";
+    const title = p ? `${p.name} – ${inr(p.price)} ${p.unit} | Vaishnavi Marble` : "Product | Vaishnavi Marble";
     const description = p
       ? `${p.description} Buy at ${inr(p.price)} (${p.discount}% off MRP ${inr(p.mrp)}).`
       : "Product details";
