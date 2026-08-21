@@ -38,10 +38,12 @@ function ImageField({
   value,
   onChange,
   label = "Product image (JPG)",
+  exclude,
 }: {
   value: string;
   onChange: (v: string) => void;
   label?: string;
+  exclude?: string;
 }) {
   const [busy, setBusy] = useState(false);
   return (
