@@ -14,6 +14,7 @@ import {
   exportOverlay,
   importOverlay,
   fileToJpegDataUrl,
+  findImageOwner,
   type ProductInput,
 } from "@/lib/catalog-store";
 import { inr } from "@/lib/cart";
@@ -230,6 +231,7 @@ function CategoriesTab({ categories }: { categories: ReturnType<typeof useCatalo
           </div>
           <ImageField
             label="Category image (JPG)"
+            exclude={editing ?? undefined}
             value={form.image}
             onChange={(image) => setForm({ ...form, image })}
           />
