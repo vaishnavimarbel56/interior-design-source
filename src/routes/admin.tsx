@@ -231,7 +231,7 @@ function CategoriesTab({ categories }: { categories: ReturnType<typeof useCatalo
           </div>
           <ImageField
             label="Category image (JPG)"
-            exclude={editing ?? undefined}
+            exclude={form.slug}
             value={form.image}
             onChange={(image) => setForm({ ...form, image })}
           />
@@ -489,7 +489,7 @@ function ProductsTab({
             </div>
           </div>
 
-          <ImageField value={form.image} onChange={(image) => setForm({ ...form, image })} />
+          <ImageField exclude={form.slug} value={form.image} onChange={(image) => setForm({ ...form, image })} />
 
           <div className="space-y-2">
             <Label>Description</Label>
