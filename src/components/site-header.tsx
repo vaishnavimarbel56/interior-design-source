@@ -1,20 +1,31 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, ShoppingCart } from "lucide-react";
+import { Menu, ShoppingCart, Settings } from "lucide-react";
 import { useState } from "react";
-import { categories } from "@/data/catalog";
+import { useCatalog } from "@/lib/catalog-store";
 import { cartCount, useCart } from "@/lib/cart";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import logo from "@/assets/logo.jpeg.asset.json";
 
 export function SiteHeader() {
   const cart = useCart();
+  const { categories } = useCatalog();
   const [open, setOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
       <div className="container-page flex h-16 items-center gap-4">
-        <Link to="/" className="font-display text-2xl tracking-tight text-foreground">
-          Tile<span className="text-primary">Haus</span>
+        <Link to="/" className="flex items-center gap-2.5">
+          <img
+            src={logo.url}
+            alt="Vaishnavi Marble logo"
+            width={40}
+            height={40}
+            className="size-10 rounded-md object-cover"
+          />
+          <span className="font-display text-xl leading-none tracking-tight text-foreground">
+            Vaishnavi <span className="text-primary">Marble</span>
+          </span>
         </Link>
 
         <nav className="ml-6 hidden items-center gap-1 lg:flex">
@@ -32,6 +43,13 @@ export function SiteHeader() {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
+          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+            <Link to="/admin" aria-label="Admin panel">
+              <Settings className="size-4" />
+              Admin
+            </Link>
+          </Button>
+
           <Button asChild variant="ghost" size="sm" className="relative">
             <Link to="/cart" aria-label="Cart">
               <ShoppingCart className="size-5" />
@@ -78,6 +96,13 @@ export function SiteHeader() {
                     </ul>
                   </div>
                 ))}
+                <Link
+                  to="/admin"
+                  onClick={() => setOpen(false)}
+                  className="block text-sm font-medium text-primary"
+                >
+                  Admin panel
+                </Link>
               </div>
             </SheetContent>
           </Sheet>
