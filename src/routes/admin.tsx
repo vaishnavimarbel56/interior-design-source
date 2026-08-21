@@ -44,7 +44,7 @@ function ImageField({
   value: string;
   onChange: (v: string) => void;
   label?: string;
-  exclude?: string;
+  exclude?: string | undefined;
 }) {
   const [busy, setBusy] = useState(false);
   return (
