@@ -4,7 +4,7 @@ import kitchenSinkImg from "@/assets/kitchen-sink.jpg";
 import vanityImg from "@/assets/vanity.jpg";
 import parkingImg from "@/assets/parking-tiles.jpg";
 import marbleImg from "@/assets/marble-granite.jpg";
-import { SUB_IMAGES } from "@/data/sub-images";
+import { SUB_IMAGES, UPLOADED_IMAGES } from "@/data/sub-images";
 
 export type Category = {
   slug: string;
