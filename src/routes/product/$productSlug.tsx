@@ -6,6 +6,7 @@ import { getProduct, products } from "@/data/catalog";
 import { addToCart, inr } from "@/lib/cart";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product-card";
+import { productImageStyle } from "@/components/product-image";
 
 export const Route = createFileRoute("/product/$productSlug")({
   loader: ({ params }) => {
@@ -88,6 +89,7 @@ function ProductPage() {
             alt={product.name}
             width={1024}
             height={768}
+            style={productImageStyle(product.slug)}
             className="aspect-[4/3] w-full object-cover"
           />
           <p className="border-t border-border px-4 py-2 text-xs text-muted-foreground">

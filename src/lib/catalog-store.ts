@@ -83,7 +83,7 @@ function merge(overlay: Overlay, loaded: boolean): CatalogSnapshot {
       if (!sub) return null;
       merged.categoryName = cat.name;
       merged.subcategoryName = sub.name;
-      if (!overlay.productPatches[p.slug]?.image && !patch.image) merged.image = cat.image;
+      
       return merged;
     })
     .filter((p): p is Product => p !== null);
