@@ -14,6 +14,7 @@ import {
   exportOverlay,
   importOverlay,
   fileToJpegDataUrl,
+  findImageOwner,
   type ProductInput,
 } from "@/lib/catalog-store";
 import { inr } from "@/lib/cart";
@@ -38,10 +39,12 @@ function ImageField({
   value,
   onChange,
   label = "Product image (JPG)",
+  exclude,
 }: {
   value: string;
   onChange: (v: string) => void;
   label?: string;
+  exclude?: string | undefined;
 }) {
   const [busy, setBusy] = useState(false);
   return (
@@ -64,7 +67,14 @@ function ImageField({
             if (!file) return;
             setBusy(true);
             try {
-              onChange(await fileToJpegDataUrl(file));
+              const dataUrl = await fileToJpegDataUrl(file);
+              const owner = findImageOwner(dataUrl, exclude);
+              if (owner) {
+                e.target.value = "";
+                toast.error(`Duplicate image — already used by ${owner}. Upload a unique photo.`);
+                return;
+              }
+              onChange(dataUrl);
               toast.success("Image ready");
             } catch {
               toast.error("Could not read that image");
@@ -221,6 +231,7 @@ function CategoriesTab({ categories }: { categories: ReturnType<typeof useCatalo
           </div>
           <ImageField
             label="Category image (JPG)"
+            exclude={form.slug}
             value={form.image}
             onChange={(image) => setForm({ ...form, image })}
           />
@@ -478,7 +489,7 @@ function ProductsTab({
             </div>
           </div>
 
-          <ImageField value={form.image} onChange={(image) => setForm({ ...form, image })} />
+          <ImageField exclude={form.slug} value={form.image} onChange={(image) => setForm({ ...form, image })} />
 
           <div className="space-y-2">
             <Label>Description</Label>

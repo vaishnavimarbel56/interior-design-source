@@ -4,7 +4,7 @@ import kitchenSinkImg from "@/assets/kitchen-sink.jpg";
 import vanityImg from "@/assets/vanity.jpg";
 import parkingImg from "@/assets/parking-tiles.jpg";
 import marbleImg from "@/assets/marble-granite.jpg";
-import { SUB_IMAGES } from "@/data/sub-images";
+import { SUB_IMAGES, UPLOADED_IMAGES } from "@/data/sub-images";
 
 export type Category = {
   slug: string;
@@ -417,6 +417,91 @@ export const categories: Category[] = [
           "Granite Slabs",
           "Granite Tiles",
           "Outdoor Granite",
+        ],
+      },
+      {
+        slug: "green-marble",
+        name: "Green Marble",
+        topics: [
+          "Rajnagar Green Marble",
+          "Forest Green Marble",
+          "Green Marble Slabs",
+          "Green Marble Tiles",
+        ],
+      },
+      {
+        slug: "grey-marble",
+        name: "Grey Marble",
+        topics: [
+          "Grey Veined Marble",
+          "Charcoal Grey Marble",
+          "Grey Marble Slabs",
+          "Grey Marble Tiles",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "marble-statues",
+    name: "Marble Statues",
+    tagline: "Hand-carved deity murtis in premium white and coloured marble",
+    image: UPLOADED_IMAGES.sitaRama,
+    subcategories: [
+      {
+        slug: "radha-krishna-statue",
+        name: "Radha Krishna Statue",
+        topics: [
+          "Radha Krishna Marble Statue",
+          "Painted Radha Krishna Murti",
+          "Standing Radha Krishna Statue",
+          "Temple Radha Krishna Statue",
+        ],
+      },
+      {
+        slug: "sita-rama-statue",
+        name: "Sita Rama Statue",
+        topics: ["Sita Rama Marble Statue", "Ram Darbar Marble Murti", "Temple Sita Rama Statue"],
+      },
+      {
+        slug: "goddess-lakshmi-statue",
+        name: "Goddess Lakshmi Statue",
+        topics: ["Lakshmi Marble Statue", "Lotus Lakshmi Murti", "Gold Painted Lakshmi Statue"],
+      },
+      {
+        slug: "maa-kali-statue",
+        name: "Maa Kali Statue",
+        topics: ["Maa Kali Marble Statue", "Black Marble Kali Murti", "Temple Kali Statue"],
+      },
+      {
+        slug: "sai-baba-statue",
+        name: "Sai Baba Statue",
+        topics: ["Sai Baba Marble Statue", "Sitting Sai Baba Murti", "Painted Sai Baba Statue"],
+      },
+    ],
+  },
+  {
+    slug: "marble-home-interiors",
+    name: "Marble Home Interiors",
+    tagline: "Marble mandirs, carved fireplaces & bespoke interior stonework",
+    image: UPLOADED_IMAGES.marbleMandir,
+    subcategories: [
+      {
+        slug: "marble-mandir",
+        name: "Marble Mandir",
+        topics: [
+          "Carved Marble Mandir",
+          "Dome Marble Temple",
+          "Home Marble Mandir",
+          "Designer Marble Temple",
+        ],
+      },
+      {
+        slug: "marble-fireplace",
+        name: "Marble Fireplace",
+        topics: [
+          "Carved Marble Fireplace",
+          "Classic Marble Mantel",
+          "Designer Marble Fireplace",
         ],
       },
     ],
