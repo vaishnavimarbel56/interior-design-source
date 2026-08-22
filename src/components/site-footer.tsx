@@ -1,5 +1,8 @@
 import { Link } from "@tanstack/react-router";
+import { MapPin, Phone, Mail, MessageCircle, ShieldCheck } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-store";
+import { SocialLinks } from "@/components/social-links";
+import { SITE, telHref, whatsappHref } from "@/lib/site-info";
 import logo from "@/assets/logo.jpeg.asset.json";
 
 export function SiteFooter() {
@@ -22,12 +25,18 @@ export function SiteFooter() {
               Vaishnavi <span className="text-primary">Marble</span>
             </p>
           </div>
+          <p className="mt-3 text-sm text-muted-foreground">{SITE.blurb}</p>
           <p className="mt-3 text-sm text-muted-foreground">
-            Tiles, sanitaryware, kitchen sinks, vanities, parking tiles, marble & granite —
-            delivered across India with secure packaging and bulk pricing.
+            Tiles, sanitaryware, kitchen sinks, vanities, parking tiles, marble statues, mandirs,
+            marble & granite.
           </p>
+          <p className="mt-5 text-sm font-semibold uppercase tracking-wide text-foreground">
+            Social media
+          </p>
+          <SocialLinks className="mt-3" />
         </div>
-        {categories.slice(0, 3).map((c) => (
+
+        {categories.slice(0, 2).map((c) => (
           <div key={c.slug}>
             <p className="text-sm font-semibold uppercase tracking-wide text-foreground">{c.name}</p>
             <ul className="mt-3 space-y-2">
@@ -46,9 +55,62 @@ export function SiteFooter() {
             </ul>
           </div>
         ))}
+
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-wide text-foreground">
+            Address & contact
+          </p>
+          <ul className="mt-3 space-y-3 text-sm text-muted-foreground">
+            <li className="flex gap-2">
+              <MapPin className="mt-0.5 size-4 shrink-0 text-primary" />
+              <a
+                href={SITE.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary"
+              >
+                {SITE.address}
+              </a>
+            </li>
+            {SITE.phones.map((p) => (
+              <li key={p} className="flex items-center gap-2">
+                <Phone className="size-4 shrink-0 text-primary" />
+                <a href={telHref(p)} className="hover:text-primary">
+                  {p}
+                </a>
+              </li>
+            ))}
+            <li className="flex items-center gap-2">
+              <MessageCircle className="size-4 shrink-0 text-primary" />
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-primary"
+              >
+                WhatsApp +91 70039 48297
+              </a>
+            </li>
+            <li className="flex items-center gap-2">
+              <Mail className="size-4 shrink-0 text-primary" />
+              <a href={`mailto:${SITE.email}`} className="hover:text-primary">
+                {SITE.email}
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div className="border-t border-border py-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Vaishnavi Marble. Bulk & wholesale enquiries welcome.
+
+      <div className="border-t border-border py-6">
+        <div className="container-page flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
+          <span>© {new Date().getFullYear()} Vaishnavi Marble. Bulk & wholesale enquiries welcome.</span>
+          <Link
+            to="/admin"
+            className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 transition-colors hover:text-primary"
+          >
+            <ShieldCheck className="size-3.5" /> Admin
+          </Link>
+        </div>
       </div>
     </footer>
   );

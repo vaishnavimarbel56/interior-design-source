@@ -1,12 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Truck, ShieldCheck, Headphones, Package } from "lucide-react";
+import { Truck, ShieldCheck, Headphones, Package } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-store";
 import { categoryLogo } from "@/data/category-logos";
 import { ProductCard } from "@/components/product-card";
 import { HScroller } from "@/components/h-scroller";
+import { HeroCarousel } from "@/components/hero-carousel";
 import { Reveal } from "@/components/reveal";
-import { Button } from "@/components/ui/button";
-import heroImg from "@/assets/tiles.jpg";
+import { SocialLinks } from "@/components/social-links";
+import { SITE } from "@/lib/site-info";
+
+
 
 const TITLE = "Vaishnavi Marble – Tiles, Sanitaryware, Marble Statues & Granite";
 const DESCRIPTION =
@@ -33,48 +36,8 @@ function Index() {
 
   return (
     <div>
-      <section className="relative overflow-hidden border-b border-border">
-        <img
-          src={heroImg}
-          alt="Marble look vitrified floor tiles in a modern living room"
-          width={1024}
-          height={768}
-          className="absolute inset-0 size-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-stone-deep/85 via-stone-deep/60 to-transparent" />
-        <div className="container-page relative py-28">
-          <Reveal>
-            <p className="text-sm uppercase tracking-[0.2em] text-accent">
-              Since 1998 · Pan-India delivery
-            </p>
-          </Reveal>
-          <Reveal delay={80}>
-            <h1 className="mt-4 max-w-2xl font-display text-5xl leading-tight text-accent md:text-6xl">
-              Tiles, sanitaryware, statues & stone for beautiful Indian homes
-            </h1>
-          </Reveal>
-          <Reveal delay={160}>
-            <p className="mt-5 max-w-xl text-lg text-accent/85">
-              Eight curated categories, hundreds of SKUs, transparent pricing with MRP, discount and
-              live stock — filter by brand, size, finish and colour.
-            </p>
-          </Reveal>
-          <Reveal delay={240}>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg">
-                <Link to="/category/$categorySlug" params={{ categorySlug: "tiles" }}>
-                  Shop Tiles <ArrowRight className="ml-2 size-4" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="secondary">
-                <Link to="/category/$categorySlug" params={{ categorySlug: "marble-statues" }}>
-                  Marble Statues
-                </Link>
-              </Button>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      <HeroCarousel />
+
 
       {/* Category logo area — one unique logo image per category */}
       <section className="border-b border-border bg-card">
@@ -202,6 +165,26 @@ function Index() {
           </HScroller>
         </Reveal>
       </section>
+
+      <section className="border-t border-border bg-secondary/50">
+        <div className="container-page py-14 text-center">
+          <Reveal>
+            <h2 className="font-display text-3xl">Visit us in Kolkata</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
+              {SITE.blurb} {SITE.address}
+            </p>
+          </Reveal>
+          <Reveal delay={100}>
+            <div className="mt-6 flex flex-col items-center gap-4">
+              <p className="text-sm text-muted-foreground">
+                {SITE.phones.join("  ·  ")}  ·  WhatsApp +91 70039 48297
+              </p>
+              <SocialLinks className="justify-center" />
+            </div>
+          </Reveal>
+        </div>
+      </section>
     </div>
+
   );
 }

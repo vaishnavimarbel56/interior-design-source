@@ -34,13 +34,16 @@ export function SiteHeader() {
               key={c.slug}
               to="/category/$categorySlug"
               params={{ categorySlug: c.slug }}
-              className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-              activeProps={{ className: "bg-secondary text-foreground" }}
+              className="group relative rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground"
+              activeProps={{ className: "text-foreground" }}
             >
-              {c.name}
+              <span className="relative z-10">{c.name}</span>
+              <span className="absolute inset-x-2 bottom-1 h-0.5 origin-left scale-x-0 rounded-full bg-primary transition-transform duration-300 group-hover:scale-x-100" />
+              <span className="absolute inset-0 -z-0 scale-90 rounded-md bg-secondary opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100" />
             </Link>
           ))}
         </nav>
+
 
         <div className="ml-auto flex items-center gap-2">
           <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
