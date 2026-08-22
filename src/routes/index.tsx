@@ -163,6 +163,26 @@ function Index() {
           </HScroller>
         </Reveal>
       </section>
+
+      <section className="border-t border-border bg-secondary/50">
+        <div className="container-page py-14 text-center">
+          <Reveal>
+            <h2 className="font-display text-3xl">Visit us in Kolkata</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground">
+              {SITE.blurb} {SITE.address}
+            </p>
+          </Reveal>
+          <Reveal delay={100}>
+            <div className="mt-6 flex flex-col items-center gap-4">
+              <p className="text-sm text-muted-foreground">
+                {SITE.phones.join("  ·  ")}  ·  WhatsApp +91 70039 48297
+              </p>
+              <SocialLinks className="justify-center" />
+            </div>
+          </Reveal>
+        </div>
+      </section>
     </div>
+
   );
 }
