@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Truck, ShieldCheck, Headphones, Package } from "lucide-react";
+import { Truck, ShieldCheck, Headphones, Package } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-store";
 import { categoryLogo } from "@/data/category-logos";
 import { ProductCard } from "@/components/product-card";
 import { HScroller } from "@/components/h-scroller";
+import { HeroCarousel } from "@/components/hero-carousel";
 import { Reveal } from "@/components/reveal";
-import { Button } from "@/components/ui/button";
-import heroImg from "@/assets/tiles.jpg";
+import { SocialLinks } from "@/components/social-links";
+
 
 const TITLE = "Vaishnavi Marble – Tiles, Sanitaryware, Marble Statues & Granite";
 const DESCRIPTION =
