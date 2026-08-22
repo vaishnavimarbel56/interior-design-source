@@ -7,6 +7,8 @@ import { HScroller } from "@/components/h-scroller";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { Reveal } from "@/components/reveal";
 import { SocialLinks } from "@/components/social-links";
+import { SITE } from "@/lib/site-info";
+
 
 
 const TITLE = "Vaishnavi Marble – Tiles, Sanitaryware, Marble Statues & Granite";
