@@ -3,7 +3,6 @@ import { Star } from "lucide-react";
 import { toast } from "sonner";
 import type { Product } from "@/data/catalog";
 import { addToCart, inr } from "@/lib/cart";
-import { productImageStyle } from "@/components/product-image";
 import { Button } from "@/components/ui/button";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -33,8 +32,7 @@ export function ProductCard({ product }: { product: Product }) {
           loading="lazy"
           width={1024}
           height={768}
-          style={productImageStyle(product.slug)}
-          className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.08]"
+          className="size-full object-contain transition-transform duration-500 group-hover:scale-[1.04]"
         />
         <span className="absolute left-3 top-3 rounded-full bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground">
           {product.discount}% OFF
