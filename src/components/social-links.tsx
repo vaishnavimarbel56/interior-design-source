@@ -1,15 +1,17 @@
 import { Youtube, Facebook, MessageCircle, Mail, Phone } from "lucide-react";
-import { SITE, whatsappHref, telHref } from "@/lib/site-info";
-
-const items = [
-  { href: SITE.social.youtube, label: "YouTube", Icon: Youtube },
-  { href: SITE.social.facebook, label: "Facebook reel", Icon: Facebook },
-  { href: whatsappHref, label: "WhatsApp", Icon: MessageCircle },
-  { href: `mailto:${SITE.email}`, label: "Email", Icon: Mail },
-  { href: telHref(SITE.phones[0]), label: "Call", Icon: Phone },
-];
+import { telHref, waHref } from "@/lib/site-info";
+import { useLiveSite } from "@/lib/site-settings";
 
 export function SocialLinks({ className = "" }: { className?: string }) {
+  const { info } = useLiveSite();
+  const items = [
+    { href: info.youtube, label: "YouTube", Icon: Youtube },
+    { href: info.facebook, label: "Facebook reel", Icon: Facebook },
+    { href: waHref(info.whatsapp), label: "WhatsApp", Icon: MessageCircle },
+    { href: `mailto:${info.email}`, label: "Email", Icon: Mail },
+    { href: telHref(info.phones[0] ?? ""), label: "Call", Icon: Phone },
+  ].filter((i) => Boolean(i.href));
+
   return (
     <div className={`flex flex-wrap items-center gap-2 ${className}`}>
       {items.map(({ href, label, Icon }) => (
