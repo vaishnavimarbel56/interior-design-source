@@ -3,7 +3,7 @@ import { MapPin, Phone, Mail, MessageCircle, ShieldCheck } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-store";
 import { SocialLinks } from "@/components/social-links";
 import { SITE, telHref, whatsappHref } from "@/lib/site-info";
-import logo from "@/assets/logo.jpeg.asset.json";
+import logo from "@/assets/logo.jpeg";
 
 export function SiteFooter() {
   const { categories } = useCatalog();
@@ -14,7 +14,7 @@ export function SiteFooter() {
         <div>
           <div className="flex items-center gap-2.5">
             <img
-              src={logo.url}
+              src={logo}
               alt="Vaishnavi Marble logo"
               width={44}
               height={44}
