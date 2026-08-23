@@ -401,6 +401,14 @@ export async function fileToJpegDataUrl(file: File, maxSide = 1400, quality = 0.
 
 /* ------------------- duplicate image protection -------------------- */
 
+type ImageScanner = (image: string, exclude?: string) => string | null;
+const extraScanners: ImageScanner[] = [];
+
+/** Lets other stores (e.g. the hero carousel) join the no-duplicates rule. */
+export function registerImageScanner(fn: ImageScanner) {
+  extraScanners.push(fn);
+}
+
 /**
  * Strict rule: the same picture may never be used twice in the catalog.
  * Returns the name of the item already using this image, or null when unique.
@@ -415,5 +423,65 @@ export function findImageOwner(image: string, exclude?: string): string | null {
     if (p.slug === exclude) continue;
     if (p.image === image) return `product "${p.name}"`;
   }
+  for (const scan of extraScanners) {
+    const owner = scan(image, exclude);
+    if (owner) return owner;
+  }
   return null;
 }
+
+/* --------------------- catalog data validation --------------------- */
+
+export type CatalogWarning = { level: "error" | "warning"; message: string };
+
+/**
+ * Checks that every product carries its own exact name and its own picture —
+ * never falling back to the category name or the category image.
+ */
+export function validateCatalog(): CatalogWarning[] {
+  const s = snapshot;
+  const out: CatalogWarning[] = [];
+  const categoryImages = new Map(s.categories.map((c) => [c.image, c.name]));
+  const byImage = new Map<string, string[]>();
+  const byName = new Map<string, string[]>();
+
+  for (const p of s.products) {
+    if (!p.name.trim()) out.push({ level: "error", message: `Product /${p.slug} has no name.` });
+    if (p.name.trim() === p.categoryName || p.name.trim() === p.subcategoryName)
+      out.push({
+        level: "error",
+        message: `"${p.name}" reuses its category/subcategory name — give it an exact product name.`,
+      });
+    if (!p.image)
+      out.push({ level: "error", message: `"${p.name}" has no image.` });
+    else if (categoryImages.has(p.image))
+      out.push({
+        level: "error",
+        message: `"${p.name}" falls back to the category image of ${categoryImages.get(p.image)}.`,
+      });
+    if (p.image) byImage.set(p.image, [...(byImage.get(p.image) ?? []), p.name]);
+    const key = p.name.trim().toLowerCase();
+    if (key) byName.set(key, [...(byName.get(key) ?? []), p.slug]);
+  }
+
+  for (const [, names] of byImage)
+    if (names.length > 1)
+      out.push({
+        level: "warning",
+        message: `Same picture used by ${names.length} products: ${names.slice(0, 4).join(", ")}${names.length > 4 ? "…" : ""}`,
+      });
+
+  for (const [name, slugs] of byName)
+    if (slugs.length > 1)
+      out.push({ level: "warning", message: `Duplicate product name "${name}" (${slugs.length}×).` });
+
+  const catImages = new Set<string>();
+  for (const c of s.categories) {
+    if (catImages.has(c.image))
+      out.push({ level: "error", message: `Category "${c.name}" reuses another category's image.` });
+    catImages.add(c.image);
+  }
+
+  return out;
+}
+

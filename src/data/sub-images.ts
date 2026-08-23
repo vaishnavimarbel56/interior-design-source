@@ -61,28 +61,29 @@ export const SUB_IMAGES: Record<string, string> = {
   granite: granite,
 };
 
-/* --- Uploaded photography (CDN assets) --- */
-import radhaKrishna from "@/assets/sub/statues-radha-krishna.jpg.asset.json";
-import sitaRama from "@/assets/sub/statues-sita-rama.jpg.asset.json";
-import lakshmi from "@/assets/sub/statues-goddess-lakshmi.jpg.asset.json";
-import maaKali from "@/assets/sub/statues-maa-kali.jpg.asset.json";
-import saiBaba from "@/assets/sub/statues-sai-baba.jpg.asset.json";
-import marbleMandir from "@/assets/sub/house-marble-mandir.jpg.asset.json";
-import marbleFireplace from "@/assets/sub/house-marble-fireplace.jpg.asset.json";
-import greenMarble from "@/assets/sub/marble-green.jpg.asset.json";
-import greyMarble from "@/assets/sub/marble-grey.jpg.asset.json";
+/* --- Uploaded photography (bundled so every host serves them) --- */
+import radhaKrishna from "@/assets/sub/statues-radha-krishna.jpg";
+import sitaRama from "@/assets/sub/statues-sita-rama.jpg";
+import lakshmi from "@/assets/sub/statues-goddess-lakshmi.jpg";
+import maaKali from "@/assets/sub/statues-maa-kali.jpg";
+import saiBaba from "@/assets/sub/statues-sai-baba.jpg";
+import marbleMandir from "@/assets/sub/house-marble-mandir.jpg";
+import marbleFireplace from "@/assets/sub/house-marble-fireplace.jpg";
+import greenMarble from "@/assets/sub/marble-green.jpg";
+import greyMarble from "@/assets/sub/marble-grey.jpg";
 
 export const UPLOADED_IMAGES = {
-  radhaKrishna: radhaKrishna.url,
-  sitaRama: sitaRama.url,
-  lakshmi: lakshmi.url,
-  maaKali: maaKali.url,
-  saiBaba: saiBaba.url,
-  marbleMandir: marbleMandir.url,
-  marbleFireplace: marbleFireplace.url,
-  greenMarble: greenMarble.url,
-  greyMarble: greyMarble.url,
+  radhaKrishna,
+  sitaRama,
+  lakshmi,
+  maaKali,
+  saiBaba,
+  marbleMandir,
+  marbleFireplace,
+  greenMarble,
+  greyMarble,
 };
+
 
 Object.assign(SUB_IMAGES, {
   "radha-krishna-statue": UPLOADED_IMAGES.radhaKrishna,
