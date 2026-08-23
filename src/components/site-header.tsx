@@ -14,7 +14,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
-      <div className="container-page flex h-16 items-center gap-4">
+      <div className="container-page flex h-16 items-center gap-3">
         <Link to="/" className="flex items-center gap-3">
           <img
             src={logo}
@@ -37,17 +37,7 @@ export function SiteHeader() {
               className="group relative rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground"
               activeProps={{ className: "text-foreground" }}
             >
-              <div className="relative z-10 flex items-center gap-2">
-                {c.image && (
-                  <img
-                    src={c.image}
-                    alt={`${c.name} thumbnail`}
-                    loading="lazy"
-                    className="w-8 h-8 object-contain rounded-sm"
-                  />
-                )}
-                <span>{c.name}</span>
-              </div>
+              <span className="relative z-10">{c.name}</span>
 
               <span className="absolute inset-x-2 bottom-1 h-0.5 origin-left scale-x-0 rounded-full bg-primary transition-transform duration-300 group-hover:scale-x-100" />
               <span className="absolute inset-0 -z-0 scale-90 rounded-md bg-secondary opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100" />
@@ -78,40 +68,30 @@ export function SiteHeader() {
             <SheetContent side="right" className="w-80 overflow-y-auto">
               <div className="mt-8 space-y-6">
                 {categories.map((c) => (
-                  <div key={c.slug} className="flex items-start gap-3">
-                    {c.image && (
-                      <img
-                        src={c.image}
-                        alt={`${c.name} thumbnail`}
-                        loading="lazy"
-                        className="w-12 h-12 object-contain rounded-sm"
-                      />
-                    )}
-                    <div>
-                      <Link
-                        to="/category/$categorySlug"
-                        params={{ categorySlug: c.slug }}
-                        onClick={() => setOpen(false)}
-                        className="font-display text-lg text-foreground"
-                      >
-                        {c.name}
-                      </Link>
-                      <ul className="mt-2 space-y-1">
-                        {c.subcategories.map((s) => (
-                          <li key={s.slug}>
-                            <Link
-                              to="/category/$categorySlug"
-                              params={{ categorySlug: c.slug }}
-                              search={{ sub: s.slug }}
-                              onClick={() => setOpen(false)}
-                              className="text-sm text-muted-foreground hover:text-primary"
-                            >
-                              {s.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                  <div key={c.slug}>
+                    <Link
+                      to="/category/$categorySlug"
+                      params={{ categorySlug: c.slug }}
+                      onClick={() => setOpen(false)}
+                      className="font-display text-lg text-foreground"
+                    >
+                      {c.name}
+                    </Link>
+                    <ul className="mt-2 space-y-1">
+                      {c.subcategories.map((s) => (
+                        <li key={s.slug}>
+                          <Link
+                            to="/category/$categorySlug"
+                            params={{ categorySlug: c.slug }}
+                            search={{ sub: s.slug }}
+                            onClick={() => setOpen(false)}
+                            className="text-sm text-muted-foreground hover:text-primary"
+                          >
+                            {s.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 ))}
                 {/* Admin link removed from mobile sheet — Admin remains in footer */}
