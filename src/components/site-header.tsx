@@ -1,11 +1,11 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, ShoppingCart, Settings } from "lucide-react";
+import { Menu, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { useCatalog } from "@/lib/catalog-store";
 import { cartCount, useCart } from "@/lib/cart";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import logo from "@/assets/logo.jpeg.asset.json";
+import logo from "@/assets/logo.jpeg";
 
 export function SiteHeader() {
   const cart = useCart();
@@ -17,7 +17,7 @@ export function SiteHeader() {
       <div className="container-page flex h-16 items-center gap-4">
         <Link to="/" className="flex items-center gap-2.5">
           <img
-            src={logo.url}
+            src={logo}
             alt="Vaishnavi Marble logo"
             width={40}
             height={40}
@@ -44,14 +44,8 @@ export function SiteHeader() {
           ))}
         </nav>
 
-
         <div className="ml-auto flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
-            <Link to="/admin" aria-label="Admin panel">
-              <Settings className="size-4" />
-              Admin
-            </Link>
-          </Button>
+          {/* Admin moved to footer only — removed from header */}
 
           <Button asChild variant="ghost" size="sm" className="relative">
             <Link to="/cart" aria-label="Cart">
@@ -99,13 +93,7 @@ export function SiteHeader() {
                     </ul>
                   </div>
                 ))}
-                <Link
-                  to="/admin"
-                  onClick={() => setOpen(false)}
-                  className="block text-sm font-medium text-primary"
-                >
-                  Admin panel
-                </Link>
+                {/* Admin link removed from mobile sheet — Admin remains in footer */}
               </div>
             </SheetContent>
           </Sheet>
