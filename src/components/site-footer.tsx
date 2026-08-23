@@ -2,11 +2,13 @@ import { Link } from "@tanstack/react-router";
 import { MapPin, Phone, Mail, MessageCircle, ShieldCheck } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-store";
 import { SocialLinks } from "@/components/social-links";
-import { SITE, telHref, whatsappHref } from "@/lib/site-info";
+import { telHref, waHref } from "@/lib/site-info";
+import { useLiveSite } from "@/lib/site-settings";
 import logo from "@/assets/logo.jpeg";
 
 export function SiteFooter() {
   const { categories } = useCatalog();
+  const { info } = useLiveSite();
 
   return (
     <footer className="mt-20 border-t border-border bg-secondary/60">
@@ -25,7 +27,7 @@ export function SiteFooter() {
               Vaishnavi <span className="text-primary">Marble</span>
             </p>
           </div>
-          <p className="mt-3 text-sm text-muted-foreground">{SITE.blurb}</p>
+          <p className="mt-3 text-sm text-muted-foreground">{info.blurb}</p>
           <p className="mt-3 text-sm text-muted-foreground">
             Tiles, sanitaryware, kitchen sinks, vanities, parking tiles, marble statues, mandirs,
             marble & granite.
@@ -64,15 +66,15 @@ export function SiteFooter() {
             <li className="flex gap-2">
               <MapPin className="mt-0.5 size-4 shrink-0 text-primary" />
               <a
-                href={SITE.mapsUrl}
+                href={info.mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary"
               >
-                {SITE.address}
+                {info.address}
               </a>
             </li>
-            {SITE.phones.map((p) => (
+            {info.phones.map((p) => (
               <li key={p} className="flex items-center gap-2">
                 <Phone className="size-4 shrink-0 text-primary" />
                 <a href={telHref(p)} className="hover:text-primary">
@@ -83,18 +85,18 @@ export function SiteFooter() {
             <li className="flex items-center gap-2">
               <MessageCircle className="size-4 shrink-0 text-primary" />
               <a
-                href={whatsappHref}
+                href={waHref(info.whatsapp)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-primary"
               >
-                WhatsApp +91 70039 48297
+                WhatsApp {info.whatsapp}
               </a>
             </li>
             <li className="flex items-center gap-2">
               <Mail className="size-4 shrink-0 text-primary" />
-              <a href={`mailto:${SITE.email}`} className="hover:text-primary">
-                {SITE.email}
+              <a href={`mailto:${info.email}`} className="hover:text-primary">
+                {info.email}
               </a>
             </li>
           </ul>
