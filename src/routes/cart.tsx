@@ -1,102 +1,198 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Trash2 } from "lucide-react";
-import { toast } from "sonner";
-import { cartTotal, inr, removeFromCart, setQty, useCart } from "@/lib/cart";
-import { Button } from "@/components/ui/button";
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { useCart } from '@/lib/hooks'
+import { Button } from '@/components/ui/button'
+import { Loader, Trash2, Plus, Minus } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { useState } from 'react'
+import { useCreateOrder } from '@/lib/hooks'
+import { toast } from 'sonner'
 
-export const Route = createFileRoute("/cart")({
-  head: () => {
-    const title = "Your Cart | Vaishnavi Marble";
-    const description = "Review your selected tiles, sanitaryware, sinks and vanities before checkout.";
-    return {
-      meta: [
-        { title },
-        { name: "description", content: description },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary_large_image" },
-      ],
-    };
-  },
+export const Route = createFileRoute('/cart')({ 
   component: CartPage,
-});
+})
 
 function CartPage() {
-  const items = useCart();
-  const total = cartTotal(items);
+  const navigate = useNavigate()
+  const { cart, removeItem, updateQuantity, total, clearCart } = useCart()
+  const { mutate: createOrder, isPending } = useCreateOrder()
+  const [showCheckout, setShowCheckout] = useState(false)
+  const [formData, setFormData] = useState({
+    customer_name: '',
+    phone: '',
+    email: '',
+    address: '',
+    city: '',
+    pincode: '',
+  })
+
+  const handleCheckout = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (cart.length === 0) {
+      toast.error('Cart is empty')
+      return
+    }
+
+    createOrder(
+      {
+        ...formData,
+        total_amount: total,
+        status: 'pending',
+      },
+      {
+        onSuccess: () => {
+          toast.success('Order created successfully!')
+          clearCart()
+          navigate({ to: '/' })
+        },
+        onError: (error: any) => {
+          toast.error(error.message || 'Failed to create order')
+        },
+      }
+    )
+  }
 
   return (
-    <div className="container-page py-10">
-      <h1 className="font-display text-4xl">Your Cart</h1>
-
-      {items.length === 0 ? (
-        <div className="mt-8 rounded-xl border border-dashed border-border p-16 text-center">
-          <p className="text-muted-foreground">Your cart is empty.</p>
-          <Button asChild className="mt-4">
-            <Link to="/">Continue shopping</Link>
-          </Button>
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="bg-white border-b border-stone-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+          <Link to="/" className="text-2xl font-bold text-amber-900">Vaishnavi Marble</Link>
+          <nav className="flex gap-6">
+            <Link to="/products" className="text-sm hover:text-amber-700">Products</Link>
+            <Link to="/contact" className="text-sm hover:text-amber-700">Contact</Link>
+            <Link to="/cart" className="text-sm font-semibold text-amber-700">Cart</Link>
+          </nav>
         </div>
-      ) : (
-        <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]">
-          <ul className="space-y-4">
-            {items.map((i) => (
-              <li key={i.slug} className="flex gap-4 rounded-xl border border-border bg-card p-4">
-                <img src={i.image} alt={i.name} loading="lazy" className="size-24 rounded-md object-cover" />
-                <div className="flex-1">
-                  <Link
-                    to="/product/$productSlug"
-                    params={{ productSlug: i.slug }}
-                    className="font-display text-lg hover:text-primary"
-                  >
-                    {i.name}
-                  </Link>
-                  <p className="text-sm text-muted-foreground">
-                    {inr(i.price)} · {i.unit}
-                  </p>
-                  <div className="mt-2 flex items-center gap-3">
-                    <div className="flex items-center rounded-md border border-border">
-                      <button className="px-2 py-1" onClick={() => setQty(i.slug, i.qty - 1)}>
-                        −
-                      </button>
-                      <span className="w-8 text-center text-sm">{i.qty}</span>
-                      <button className="px-2 py-1" onClick={() => setQty(i.slug, i.qty + 1)}>
-                        +
-                      </button>
-                    </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <h1 className="text-4xl font-bold text-stone-900 mb-8">Shopping Cart</h1>
+
+        {cart.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-stone-600 mb-4">Your cart is empty</p>
+            <Link to="/products">
+              <Button className="bg-amber-700 hover:bg-amber-800">Continue Shopping</Button>
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Cart Items */}
+            <div className="lg:col-span-2 space-y-4">
+              {cart.map((item) => (
+                <div key={item.product_id} className="bg-stone-50 p-4 rounded-lg border border-stone-200 flex justify-between items-start">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-stone-900">{item.product_name}</h3>
+                    <p className="text-amber-700 font-bold mt-2">₹{item.price}</p>
+                  </div>
+                  <div className="flex items-center gap-2 mr-4">
                     <button
-                      className="inline-flex items-center gap-1 text-sm text-destructive"
-                      onClick={() => removeFromCart(i.slug)}
+                      onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
+                      className="p-1 hover:bg-stone-200 rounded"
                     >
-                      <Trash2 className="size-4" /> Remove
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="w-8 text-center">{item.quantity}</span>
+                    <button
+                      onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
+                      className="p-1 hover:bg-stone-200 rounded"
+                    >
+                      <Plus className="w-4 h-4" />
                     </button>
                   </div>
+                  <button
+                    onClick={() => removeItem(item.product_id)}
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
-                <p className="font-semibold">{inr(i.price * i.qty)}</p>
-              </li>
-            ))}
-          </ul>
+              ))}
+            </div>
 
-          <aside className="h-fit rounded-xl border border-border bg-card p-6 shadow-card">
-            <h2 className="font-display text-xl">Order Summary</h2>
-            <div className="mt-4 flex justify-between text-sm text-muted-foreground">
-              <span>Subtotal</span>
-              <span className="text-foreground">{inr(total)}</span>
+            {/* Checkout */}
+            <div className="bg-stone-50 p-6 rounded-lg border border-stone-200 h-fit">
+              <h3 className="font-bold text-stone-900 mb-4">Order Summary</h3>
+              <div className="space-y-2 mb-4 pb-4 border-b border-stone-200">
+                {cart.map((item) => (
+                  <div key={item.product_id} className="flex justify-between text-sm">
+                    <span className="text-stone-600">{item.product_name} x{item.quantity}</span>
+                    <span className="font-semibold">₹{item.price * item.quantity}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-between mb-6 text-lg font-bold">
+                <span>Total:</span>
+                <span className="text-amber-700">₹{total}</span>
+              </div>
+
+              {!showCheckout ? (
+                <Button
+                  onClick={() => setShowCheckout(true)}
+                  className="w-full bg-amber-700 hover:bg-amber-800"
+                >
+                  Proceed to Checkout
+                </Button>
+              ) : (
+                <form onSubmit={handleCheckout} className="space-y-3">
+                  <Input
+                    placeholder="Full Name"
+                    value={formData.customer_name}
+                    onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
+                    required
+                  />
+                  <Input
+                    placeholder="Phone"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    required
+                  />
+                  <Input
+                    placeholder="Email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                  />
+                  <Input
+                    placeholder="Address"
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    required
+                  />
+                  <Input
+                    placeholder="City"
+                    value={formData.city}
+                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                    required
+                  />
+                  <Input
+                    placeholder="Pincode"
+                    value={formData.pincode}
+                    onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                    required
+                  />
+                  <Button
+                    type="submit"
+                    disabled={isPending}
+                    className="w-full bg-green-600 hover:bg-green-700"
+                  >
+                    {isPending ? (
+                      <>
+                        <Loader className="w-4 h-4 mr-2 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      'Place Order'
+                    )}
+                  </Button>
+                </form>
+              )}
             </div>
-            <div className="mt-2 flex justify-between text-sm text-muted-foreground">
-              <span>Delivery</span>
-              <span>Calculated at checkout</span>
-            </div>
-            <div className="mt-4 flex justify-between border-t border-border pt-4 text-lg font-semibold">
-              <span>Total</span>
-              <span>{inr(total)}</span>
-            </div>
-            <Button className="mt-5 w-full" onClick={() => toast.success("Our team will contact you to confirm the order.")}>
-              Place Order Enquiry
-            </Button>
-          </aside>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
-  );
+  )
 }
